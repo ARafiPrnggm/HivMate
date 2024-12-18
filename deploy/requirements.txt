@@ -1,5 +1,5 @@
-streamlit==1.26.0
-torch==1.13.0
+streamlit
+torch
 sentence-transformers
 scikit-learn
 numpy
