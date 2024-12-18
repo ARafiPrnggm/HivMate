@@ -1,5 +1,5 @@
 streamlit==1.26.0
-pillow==9.4.0
+pillow==8.4.0
 torch
 sentence-transformers
 transformers
