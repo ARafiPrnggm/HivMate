@@ -1,11 +1,11 @@
-from flask import Flask, render_template, request, jsonify
+import streamlit as st
 from sentence_transformers import SentenceTransformer
 from sklearn.metrics.pairwise import cosine_similarity
 import numpy as np
 import json
 
-# Inisialisasi Flask app dan model
-app = Flask(__name__)
+# Inisialisasi model
+st.title("Chatbot dengan Streamlit")
 model = SentenceTransformer("distiluse-base-multilingual-cased-v2")
 
 # Baca data dari file JSON
@@ -19,26 +19,18 @@ for intent in data["intents"]:
     questions.extend(intent["text"])
     responses.extend(intent["responses"])
 
-# Hitung embeddings dataset untuk prediksi berbasis ML
+# Hitung embeddings dataset
 question_embeddings = model.encode(questions)
 
-@app.route("/")
-def home():
-    return render_template("index.html")
-
-@app.route("/get_response", methods=["POST"])
-def get_response():
-    data = request.json  # Menerima data JSON dari request
-    user_input = data.get("user_input", "").lower()
-
-    # Hitung embedding input pengguna
+# Fungsi untuk mendapatkan respons
+def get_response(user_input):
     user_embedding = model.encode([user_input])
     similarities = cosine_similarity(user_embedding, question_embeddings)
     best_match_idx = np.argmax(similarities)
+    return responses[best_match_idx]
 
-    # Ambil respons berbasis kemiripan tertinggi
-    response = responses[best_match_idx]
-    return jsonify({"response": response})
-
-if __name__ == "__main__":
-    app.run(debug=True)
+# Streamlit Input/Output
+st.text_input("Masukkan pesan Anda:", key="user_input")
+if st.session_state.user_input:
+    response = get_response(st.session_state.user_input.lower())
+    st.write(f"Bot: {response}")
