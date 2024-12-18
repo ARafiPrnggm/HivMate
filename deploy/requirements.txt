@@ -1,7 +1,7 @@
 streamlit==1.26.0
-sentence-transformers==2.2.2
-torch>=2.0.0
+pillow==9.4.0
+torch
+sentence-transformers
 transformers
-numpy
 scikit-learn
-pillow>=9.0.0,<10.0.0
+numpy
