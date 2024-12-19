@@ -1,71 +1,123 @@
-# Fungsi Reset Chat (General) 
-def reset_chat_history():
-    st.session_state.chat_history = []
-    st.session_state.input_key = 0 
+import streamlit as st
+from sentence_transformers import SentenceTransformer
+from sklearn.metrics.pairwise import cosine_similarity
+import numpy as np
+import json
+import os
 
-# Setup bar di dalam streamlit
-st.set_page_config(
-    page_title="MentiChat",
-    page_icon="../assets/sun.png",
-    layout="wide",
-    initial_sidebar_state="expanded",
-)
+file_path = os.path.join(os.path.dirname(__file__), "datasetDL.json")
+with open(file_path, "r", encoding="utf-8") as file:
+    data = json.load(file)
+    
+model = SentenceTransformer("distiluse-base-multilingual-cased-v2")
 
-# Setup Sidebar ada apa aja
-st.sidebar.title("Mental Health AI Chat")
-st.sidebar.markdown("""
-Welcome to the AI-powered mental health chatbot.
-Feel free to ask questions or discuss your thoughts in a safe, non-judgmental space. 💙
-""")
-st.sidebar.image("https://plus.unsplash.com/premium_photo-1661389446461-1e22c995e48b?q=80&w=1467&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D", use_container_width=True)
+questions = []
+responses = []
+for intent in data["intents"]:
+    questions.extend(intent["text"])
+    responses.extend(intent["responses"])
 
+question_embeddings = model.encode(questions)
 
-# Tambahkan tombol reset di sidebar dengan styling
-st.sidebar.markdown("""
+st.set_page_config(page_title="Chatbot Edukasi HIV", page_icon="🎗️", layout="wide")
+
+st.image("deploy/hivmate-01.png", width=200)
+
+st.markdown("""
     <style>
-        .center-button {
-            display: flex;
-            justify-content: center;
-            margin: 1em 0;
+        .title {
+            color: #d90429;
+            font-size: 36px;
+            font-weight: bold;
+            text-align: center;
+            margin-top: -20px;
+        }
+        .subtitle {
+            color: #333;
+            font-size: 18px;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .chat-container {
+            background-color: #f4f4f4;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            max-width: 700px;
+            margin: auto;
+            overflow-y: auto;
+            max-height: 500px;
+        }
+        .chat-bubble-user {
+            background-color: #d90429;
+            color: #ffffff;
+            padding: 10px;
+            border-radius: 20px;
+            margin: 5px 0;
+            max-width: 80%;
+            float: left;
+            clear: both;
+            position: relative;
+        }
+        .chat-bubble-bot {
+            background-color: #2b2d42;
+            color: #ffffff;
+            padding: 10px;
+            border-radius: 20px;
+            margin: 5px 0;
+            max-width: 80%;
+            float: right;
+            clear: both;
+            position: relative;
+        }
+        .response {
+            font-size: 16px;
+        }
+        .send-button {
+            background-color: #d90429;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 20px;
+            cursor: pointer;
+            width: 100%;
+        }
+        .send-button:hover {
+            background-color: #b10425;
         }
     </style>
+    <div class="title">Chatbot Edukasi HIV 🎗️</div>
+    <div class="subtitle">Temukan informasi terpercaya seputar HIV/AIDS di sini!</div>
 """, unsafe_allow_html=True)
 
-if st.sidebar.button("🔄 Reset Chat History", key="reset_button", use_container_width=True):
-    reset_chat_history()
-    st.rerun()
+st.markdown('<div class="chat-container" id="chat-container">', unsafe_allow_html=True)
 
-# Sidebar - Model Selection
-st.sidebar.subheader("Model Selection")
-model_provider = st.sidebar.selectbox(
-    "Choose a model provider:",
-    ["Hugging Face", "Google"],
-    key="model_provider_selectbox"
-)
-
-if model_provider == "Hugging Face":
-    model_name = st.sidebar.selectbox(
-        "Choose a Hugging Face model:",
-        ["numind/NuExtract-1.5", "facebook/blenderbot-400M-distill", "microsoft/Phi-3.5-mini-instruct"],
-        key="huggingface_model_selectbox"
-    )
-    HF_API_KEY = API_HF_KEY
-else:
-    model_name = None
-
-if model_provider == "Google":
-    if not API_DB:
-        st.sidebar.error("Google API key not found in .env file!")
-
-
-# Chat history
 if "chat_history" not in st.session_state:
     st.session_state["chat_history"] = []
 
-# Chat Interface
+user_input = st.text_input("Tulis pertanyaan Anda di sini:", placeholder="Contoh: Apa itu HIV?", key="user_input")
+
+if user_input:
+    user_embedding = model.encode([user_input])
+    similarities = cosine_similarity(user_embedding, question_embeddings)
+    best_match_idx = np.argmax(similarities)
+    response = responses[best_match_idx]
+    st.session_state["chat_history"].append({"user": user_input, "bot": response})
+
+for chat in st.session_state["chat_history"]:
+    st.markdown(f'<div class="chat-bubble-user">{chat["user"]}</div>', unsafe_allow_html=True)
+    st.markdown(f'<div class="chat-bubble-bot">{chat["bot"]}</div>', unsafe_allow_html=True)
+
+st.markdown("</div>", unsafe_allow_html=True)
+
 st.markdown("""
-<div style="background-color:#f0f0f5; padding:10px; border-radius:10px; text-align:center;">
-    <h1 style="color:#336699;">🧠 MentiChat</h1>
-    <p style="color:#666;">Your AI Mental Health Companion</p>
-</div>
+    <div style="text-align: center; margin-top: 50px; font-size: 12px; color: #888;">
+        Dibuat oleh <strong>[A Rafi Paringgom Iwari]</strong>. Chatbot ini bertujuan untuk meningkatkan kesadaran tentang HIV/AIDS. 
+        Jika membutuhkan informasi lebih lanjut, silakan konsultasi dengan profesional medis.
+    </div>
 """, unsafe_allow_html=True)
+
+if st.button("Kirim", key="send_button"):
+    user_input = st.session_state.get("user_input", "")
+    if user_input:
+        st.text_input("Tulis pertanyaan Anda di sini:", placeholder="Contoh: Apa itu HIV?", key="user_input", value="")
