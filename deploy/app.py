@@ -22,9 +22,7 @@ question_embeddings = model.encode(questions)
 
 st.set_page_config(page_title="Chatbot Edukasi HIV", page_icon="🎗️", layout="wide")
 
-st.image("https://pbs.twimg.com/profile_images/1272461269136576512/Uw9AShxq_400x400.jpg", width=100)
-
-st.image("https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.itera.ac.id%2Fpengumuan-ujian-seleksi-mandiri-usm-itera%2Flogo-itera-oke%2F&psig=AOvVaw0BwqoyopUDh0m3YMpw4Z7Z&ust=1734657703016000&source=images&cd=vfe&opi=89978449&ved=0CBEQjRxqFwoTCNiCn9PVsooDFQAAAAAdAAAAABAE", width=100)  
+st.image("hivemate-01.png", width=100)
 
 st.markdown("""
     <style>
