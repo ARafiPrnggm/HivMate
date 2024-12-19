@@ -1,123 +1,71 @@
-import streamlit as st
-from sentence_transformers import SentenceTransformer
-from sklearn.metrics.pairwise import cosine_similarity
-import numpy as np
-import json
-import os
+# Fungsi Reset Chat (General) 
+def reset_chat_history():
+    st.session_state.chat_history = []
+    st.session_state.input_key = 0 
 
-file_path = os.path.join(os.path.dirname(__file__), "datasetDL.json")
-with open(file_path, "r", encoding="utf-8") as file:
-    data = json.load(file)
+# Setup bar di dalam streamlit
+st.set_page_config(
+    page_title="MentiChat",
+    page_icon="../assets/sun.png",
+    layout="wide",
+    initial_sidebar_state="expanded",
+)
 
-# Inisialisasi model
-model = SentenceTransformer("distiluse-base-multilingual-cased-v2")
+# Setup Sidebar ada apa aja
+st.sidebar.title("Mental Health AI Chat")
+st.sidebar.markdown("""
+Welcome to the AI-powered mental health chatbot.
+Feel free to ask questions or discuss your thoughts in a safe, non-judgmental space. 💙
+""")
+st.sidebar.image("https://plus.unsplash.com/premium_photo-1661389446461-1e22c995e48b?q=80&w=1467&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D", use_container_width=True)
 
-questions = []
-responses = []
-for intent in data["intents"]:
-    questions.extend(intent["text"])
-    responses.extend(intent["responses"])
 
-question_embeddings = model.encode(questions)
-
-# Set up Streamlit page
-st.set_page_config(page_title="Chatbot Edukasi HIV", page_icon="🎗️", layout="wide")
-
-# Add header styling
-st.markdown("""
+# Tambahkan tombol reset di sidebar dengan styling
+st.sidebar.markdown("""
     <style>
-        .header {
-            background-color: #336699;
-            padding: 20px;
-            border-radius: 10px;
-            text-align: center;
-        }
-        .header h1 {
-            color: #ffffff;
-            font-size: 36px;
-            margin: 0;
-        }
-        .header p {
-            color: #cccccc;
-            font-size: 16px;
-            margin: 5px 0 0;
-        }
-    </style>
-    <div class="header">
-        <h1>🎗️ Chatbot Edukasi HIV</h1>
-        <p>Temukan informasi terpercaya seputar HIV/AIDS di sini!</p>
-    </div>
-""", unsafe_allow_html=True)
-
-# Add custom chat container styling
-st.markdown("""
-    <style>
-        .chat-container {
-            background-color: #f0f8ff;
-            border-radius: 15px;
-            padding: 20px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-            max-width: 750px;
-            margin: auto;
-            overflow-y: auto;
-            max-height: 600px;
-        }
-        .chat-bubble-user {
-            background-color: #008cba;
-            color: white;
-            padding: 10px;
-            border-radius: 15px;
-            margin: 10px 0;
-            max-width: 75%;
-            float: left;
-            clear: both;
-        }
-        .chat-bubble-bot {
-            background-color: #333;
-            color: white;
-            padding: 10px;
-            border-radius: 15px;
-            margin: 10px 0;
-            max-width: 75%;
-            float: right;
-            clear: both;
-        }
-        .response {
-            font-size: 16px;
+        .center-button {
+            display: flex;
+            justify-content: center;
+            margin: 1em 0;
         }
     </style>
 """, unsafe_allow_html=True)
 
-# Chat history container
-st.markdown('<div class="chat-container" id="chat-container">', unsafe_allow_html=True)
+if st.sidebar.button("🔄 Reset Chat History", key="reset_button", use_container_width=True):
+    reset_chat_history()
+    st.rerun()
 
+# Sidebar - Model Selection
+st.sidebar.subheader("Model Selection")
+model_provider = st.sidebar.selectbox(
+    "Choose a model provider:",
+    ["Hugging Face", "Google"],
+    key="model_provider_selectbox"
+)
+
+if model_provider == "Hugging Face":
+    model_name = st.sidebar.selectbox(
+        "Choose a Hugging Face model:",
+        ["numind/NuExtract-1.5", "facebook/blenderbot-400M-distill", "microsoft/Phi-3.5-mini-instruct"],
+        key="huggingface_model_selectbox"
+    )
+    HF_API_KEY = API_HF_KEY
+else:
+    model_name = None
+
+if model_provider == "Google":
+    if not API_DB:
+        st.sidebar.error("Google API key not found in .env file!")
+
+
+# Chat history
 if "chat_history" not in st.session_state:
     st.session_state["chat_history"] = []
 
-user_input = st.text_input("Tulis pertanyaan Anda di sini:", placeholder="Contoh: Apa itu HIV?", key="user_input")
-
-if user_input:
-    user_embedding = model.encode([user_input])
-    similarities = cosine_similarity(user_embedding, question_embeddings)
-    best_match_idx = np.argmax(similarities)
-    response = responses[best_match_idx]
-    st.session_state["chat_history"].append({"user": user_input, "bot": response})
-
-for chat in st.session_state["chat_history"]:
-    st.markdown(f'<div class="chat-bubble-user">{chat["user"]}</div>', unsafe_allow_html=True)
-    st.markdown(f'<div class="chat-bubble-bot">{chat["bot"]}</div>', unsafe_allow_html=True)
-
-st.markdown("</div>", unsafe_allow_html=True)
-
-# Footer with attribution
+# Chat Interface
 st.markdown("""
-    <div style="text-align: center; margin-top: 30px; font-size: 14px; color: #555;">
-        Dibuat oleh <strong>A Rafi Paringgom Iwari</strong>. Chatbot ini bertujuan untuk meningkatkan kesadaran tentang HIV/AIDS. 
-        Jika membutuhkan informasi lebih lanjut, silakan konsultasi dengan profesional medis.
-    </div>
+<div style="background-color:#f0f0f5; padding:10px; border-radius:10px; text-align:center;">
+    <h1 style="color:#336699;">🧠 MentiChat</h1>
+    <p style="color:#666;">Your AI Mental Health Companion</p>
+</div>
 """, unsafe_allow_html=True)
-
-if st.button("Kirim", key="send_button"):
-    user_input = st.session_state.get("user_input", "")
-    if user_input:
-        st.text_input("Tulis pertanyaan Anda di sini:", placeholder="Contoh: Apa itu HIV?", key="user_input", value="")
