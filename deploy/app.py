@@ -123,7 +123,9 @@ st.markdown('<div class="chat-container">', unsafe_allow_html=True)
 st.markdown(
     """
     <div class="logo-container">
-        <img src="deploy/hivmate-01.png" alt="Logo 3">
+        <img src="deploy/logo-itera.jpg" alt="Logo 1">
+        <img src="deploy/sd.jpg" alt="Logo 2">
+        <img src="deploy/hivmate-01.jpg" alt="Logo 3">
     </div>
     <div class="header">
         <h1>Chatbot Edukasi HIV 🎗️</h1>
