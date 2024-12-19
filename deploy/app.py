@@ -5,7 +5,7 @@ import numpy as np
 import json
 import os
 
-# Menentukan jalur file dataset
+
 file_path = os.path.join(os.path.dirname(__file__), "datasetDL.json")
 with open(file_path, "r", encoding="utf-8") as file:
     data = json.load(file)
@@ -13,21 +13,18 @@ with open(file_path, "r", encoding="utf-8") as file:
 # Inisialisasi model
 model = SentenceTransformer("distiluse-base-multilingual-cased-v2")
 
-# Parsing intents dari JSON
 questions = []
 responses = []
 for intent in data["intents"]:
     questions.extend(intent["text"])
     responses.extend(intent["responses"])
 
-# Hitung embeddings dataset untuk prediksi berbasis ML
 question_embeddings = model.encode(questions)
 
-# Streamlit UI dengan tema edukasi HIV
 st.set_page_config(page_title="Chatbot Edukasi HIV", page_icon="🎗️", layout="wide")
 
-# Header dengan logo
-st.image("https://pbs.twimg.com/profile_images/1272461269136576512/Uw9AShxq_400x400.jpg", width=100)  # Ganti "logo.png" dengan jalur logo Anda
+st.image("https://pbs.twimg.com/profile_images/1272461269136576512/Uw9AShxq_400x400.jpg", width=100) 
+st.image("hivmate-01.png", width=100) 
 st.markdown("""
     <style>
         .title {
@@ -95,36 +92,33 @@ st.markdown("""
     <div class="subtitle">Temukan informasi terpercaya seputar HIV/AIDS di sini!</div>
 """, unsafe_allow_html=True)
 
-# Kontainer chat
 st.markdown('<div class="chat-container" id="chat-container">', unsafe_allow_html=True)
 
-# Variabel untuk riwayat percakapan
 if "chat_history" not in st.session_state:
     st.session_state["chat_history"] = []
 
-# Input pengguna
+
 user_input = st.text_input("Tulis pertanyaan Anda di sini:", placeholder="Contoh: Apa itu HIV?", key="user_input")
 
 if user_input:
-    # Hitung embedding input pengguna
+    
     user_embedding = model.encode([user_input])
     similarities = cosine_similarity(user_embedding, question_embeddings)
     best_match_idx = np.argmax(similarities)
 
-    # Ambil respons berbasis kemiripan tertinggi
+   
     response = responses[best_match_idx]
 
-    # Simpan percakapan ke riwayat
     st.session_state["chat_history"].append({"user": user_input, "bot": response})
 
-# Tampilkan riwayat percakapan dengan desain obrolan mirip WhatsApp
+
 for chat in st.session_state["chat_history"]:
     st.markdown(f'<div class="chat-bubble-user">{chat["user"]}</div>', unsafe_allow_html=True)
     st.markdown(f'<div class="chat-bubble-bot">{chat["bot"]}</div>', unsafe_allow_html=True)
 
 st.markdown("</div>", unsafe_allow_html=True)
 
-# Footer dengan kredit
+
 st.markdown("""
     <div style="text-align: center; margin-top: 50px; font-size: 12px; color: #888;">
         Dibuat oleh <strong>[Nama Anda]</strong>. Chatbot ini bertujuan untuk meningkatkan kesadaran tentang HIV/AIDS. 
@@ -132,7 +126,7 @@ st.markdown("""
     </div>
 """, unsafe_allow_html=True)
 
-# Tambahkan tombol kirim
+
 if st.button("Kirim", key="send_button"):
     user_input = st.session_state.get("user_input", "")
     if user_input:
