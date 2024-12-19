@@ -24,12 +24,12 @@ st.set_page_config(page_title="Chatbot Edukasi HIV", page_icon="🎗️", layout
 
 col1, col2, col3 = st.columns([1, 1, 1])
 with col1:
-    st.image("deploy/logo-itera.jpg", width=80)  
+    st.image("deploy/Logo-ITERA.png", width=120)  
 
 with col2:
-    st.image("deploy/sd.jpg", width=80) 
+    st.image("deploy/sd.jpg", width=120) 
 with col3:
-    st.image("deploy/hivmate-01.png", width=80)
+    st.image("deploy/hivmate-01.png", width=120)
 
 st.markdown("""
     <style>
