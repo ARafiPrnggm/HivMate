@@ -22,12 +22,12 @@ question_embeddings = model.encode(questions)
 
 st.set_page_config(page_title="Chatbot Edukasi HIV", page_icon="🎗️", layout="wide")
 
-col1, col2, col3 = st.columns([2, 2, 2])
+col1, col2, col3 = st.columns([5, 5, 5])
 with col1:
-    st.image("deploy/Logo_ITERA.png", width=120)  
+    st.image("deploy/Logo_ITERA.png", width=200)  
 
 with col2:
-    st.image("deploy/sd.jpg", width=120) 
+    st.image("deploy/sd.jpg", width=200) 
 with col3:
     st.image("deploy/hivmate-01.png", width=200)
 
