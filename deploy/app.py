@@ -26,7 +26,15 @@ question_embeddings = model.encode(questions)
 # Streamlit UI dengan tema edukasi HIV
 st.set_page_config(page_title="Chatbot Edukasi HIV", page_icon="🎗️", layout="wide")
 
-# Header dan pengenalan
+# Header dengan tiga logo
+col1, col2, col3 = st.columns(3)
+with col1:
+    st.image("logo1.png", width=100)  # Ganti "logo1.png" dengan nama file logo pertama
+with col2:
+    st.image("logo2.png", width=100)  # Ganti "logo2.png" dengan nama file logo kedua
+with col3:
+    st.image("logo3.png", width=100)  # Ganti "logo3.png" dengan nama file logo ketiga
+
 st.markdown("""
     <style>
         body {
@@ -88,10 +96,10 @@ if user_input:
 
 st.markdown("</div>", unsafe_allow_html=True)
 
-# Footer
+# Footer dengan kredit
 st.markdown("""
-    <div style="text-align: center; margin-top: 50px; font-size: 12px; color: #888;">
-        Chatbot Edukasi HIV dibuat untuk membantu meningkatkan kesadaran tentang HIV/AIDS. 
-        Jika Anda membutuhkan informasi lebih lanjut, konsultasikan dengan profesional medis.
+    <div style="text-align: center; margin-top: 50px; font-size: 14px; color: #555;">
+        Dibuat dengan ❤️ oleh <strong>[Nama Anda]</strong>. Model berbasis <i>distiluse-base-multilingual-cased-v2</i>. 
+        Untuk informasi lebih lanjut, konsultasikan dengan profesional medis.
     </div>
 """, unsafe_allow_html=True)
