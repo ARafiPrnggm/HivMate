@@ -30,9 +30,7 @@ for intent in data["intents"]:
 # Hitung embeddings dataset untuk prediksi berbasis ML
 question_embeddings = model.encode(questions)
 
-# Streamlit UI dengan tema edukasi HIV
-st.image("https://pbs.twimg.com/profile_images/1272461269136576512/Uw9AShxq_400x400.jpg", width=100)  # Ganti dengan jalur logo Anda
-
+# Menambahkan CSS dengan st.markdown
 st.markdown("""
     <style>
         body {
