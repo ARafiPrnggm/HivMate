@@ -11,7 +11,11 @@ with open(file_path, "r", encoding="utf-8") as file:
     data = json.load(file)
 
 # Inisialisasi model
-model = SentenceTransformer("distiluse-base-multilingual-cased-v2")
+@st.cache_resource
+def load_model():
+    return SentenceTransformer("distiluse-base-multilingual-cased-v2")
+
+model = load_model()
 
 # Parsing intents dari JSON
 questions = []
@@ -27,7 +31,8 @@ question_embeddings = model.encode(questions)
 st.set_page_config(page_title="Chatbot Edukasi HIV", page_icon="🎗️", layout="wide")
 
 # Header dengan logo
-st.image("https://pbs.twimg.com/profile_images/1272461269136576512/Uw9AShxq_400x400.jpg", width=100)  # Ganti "logo.png" dengan jalur logo Anda
+st.image("https://pbs.twimg.com/profile_images/1272461269136576512/Uw9AShxq_400x400.jpg", width=100)  # Ganti dengan jalur logo Anda
+
 st.markdown("""
     <style>
         body {
@@ -112,36 +117,10 @@ st.markdown("""
     </style>
 """, unsafe_allow_html=True)
 
-# Struktur HTML untuk chat
-st.markdown("""
-    <div class="chat-container">
-        <h1>Chatbot Edukasi HIV</h1>
-        <div id="chat-box">
-            <div class="bot-message">Halo! Selamat datang di Chatbot Edukasi HIV. Bagaimana saya bisa membantu Anda?</div>
-        </div>
-        <form>
-            <input type="text" id="user-input" placeholder="Tulis pesan Anda...">
-            <button type="submit">Kirim</button>
-        </form>
-    </div>
-""", unsafe_allow_html=True)
-
-# Fungsi Chatbot (gunakan komponen Streamlit)
-user_input = st.text_input("Tulis pesan Anda:", key="user_input")
-if user_input:
-    st.markdown(f"""
-        <div class="user-message">{user_input}</div>
-        <div class="bot-message">Ini adalah respons dari chatbot untuk: {user_input}</div>
-    """, unsafe_allow_html=True)
-
-# Variabel untuk riwayat percakapan
-if "chat_history" not in st.session_state:
-    st.session_state["chat_history"] = []
-
 # Input pengguna
 user_input = st.text_input("Tulis pertanyaan Anda di sini:", placeholder="Contoh: Apa itu HIV?", key="user_input")
 
-if user_input:
+if user_input.strip():
     # Hitung embedding input pengguna
     user_embedding = model.encode([user_input])
     similarities = cosine_similarity(user_embedding, question_embeddings)
@@ -151,14 +130,14 @@ if user_input:
     response = responses[best_match_idx]
 
     # Simpan percakapan ke riwayat
+    if "chat_history" not in st.session_state:
+        st.session_state["chat_history"] = []
     st.session_state["chat_history"].append({"user": user_input, "bot": response})
 
 # Tampilkan riwayat percakapan
 for chat in st.session_state["chat_history"]:
     st.write(f"**Anda:** {chat['user']}")
     st.markdown(f'<div class="response">**Chatbot:** {chat["bot"]}</div>', unsafe_allow_html=True)
-
-st.markdown("</div>", unsafe_allow_html=True)
 
 # Footer dengan kredit
 st.markdown("""
