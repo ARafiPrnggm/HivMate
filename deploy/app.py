@@ -123,9 +123,9 @@ st.markdown('<div class="chat-container">', unsafe_allow_html=True)
 st.markdown(
     """
     <div class="logo-container">
-        <img src="https://www.itera.ac.id/wp-content/uploads/2016/02/logo-itera-oke.jpg/150" alt="Logo 1">
-        <img src="https://pbs.twimg.com/profile_images/1272461269136576512/Uw9AShxq_400x400.jpg/150" alt="Logo 2">
-        <img src="https://github.com/ARafiPrnggm/HivMate/edit/main/deploy/hivmate-01.png/150" alt="Logo 3">
+        <img src="https://www.itera.ac.id/wp-content/uploads/2016/02/logo-itera-oke.jpg" alt="Logo 1">
+        <img src="https://pbs.twimg.com/profile_images/1272461269136576512/Uw9AShxq_400x400.jpg" alt="Logo 2">
+        <img src="https://github.com/ARafiPrnggm/HivMate/edit/main/deploy/hivmate-01.png" alt="Logo 3">
     </div>
     <div class="header">
         <h1>Chatbot Edukasi HIV 🎗️</h1>
