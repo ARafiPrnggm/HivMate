@@ -27,7 +27,7 @@ question_embeddings = model.encode(questions)
 st.set_page_config(page_title="Chatbot Edukasi HIV", page_icon="🎗️", layout="wide")
 
 # Header dengan logo
-st.image("logo.png", width=100)  # Ganti "logo.png" dengan jalur logo Anda
+st.image("https://pbs.twimg.com/profile_images/1272461269136576512/Uw9AShxq_400x400.jpg", width=100)  # Ganti "logo.png" dengan jalur logo Anda
 st.markdown("""
     <style>
         .title {
