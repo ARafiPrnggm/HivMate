@@ -122,9 +122,10 @@ if user_input:
     response = responses[best_match_idx]
     st.session_state["chat_history"].append({"user": user_input, "bot": response})
 
-for chat in st.session_state["chat_history"]:
-    st.markdown(f'<div class="chat-bubble-bot">{chat["bot"]}</div>', unsafe_allow_html=True)
-    st.markdown(f'<div class="chat-bubble-user">{chat["user"]}</div>', unsafe_allow_html=True)
+if st.session_state["chat_history"]:
+    for chat in st.session_state["chat_history"]:
+        st.markdown(f'<div class="chat-bubble-bot">{chat["bot"]}</div>', unsafe_allow_html=True)
+        st.markdown(f'<div class="chat-bubble-user">{chat["user"]}</div>', unsafe_allow_html=True)
 
 st.markdown("</div>", unsafe_allow_html=True)
 
