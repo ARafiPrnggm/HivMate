@@ -22,7 +22,7 @@ question_embeddings = model.encode(questions)
 
 st.set_page_config(page_title="Chatbot Edukasi HIV", page_icon="🎗️", layout="wide")
 
-col1, col2, col3 = st.columns([1, 1])
+col1, col2, col3 = st.columns([1, 1, 1])
 with col1:
     st.image("deploy/logo-itera.jpg", width=80)  
 
