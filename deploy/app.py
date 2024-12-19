@@ -3,13 +3,15 @@ from sentence_transformers import SentenceTransformer
 from sklearn.metrics.pairwise import cosine_similarity
 import numpy as np
 import json
+import os
+
+# Menentukan jalur file dataset
+file_path = os.path.join(os.path.dirname(__file__), "datasetDL.json")
+with open(file_path, "r", encoding="utf-8") as file:
+    data = json.load(file)
 
 # Inisialisasi model
 model = SentenceTransformer("distiluse-base-multilingual-cased-v2")
-
-# Baca data dari file JSON
-with open("datasetDL.json", "r", encoding="utf-8") as file:
-    data = json.load(file)
 
 # Parsing intents dari JSON
 questions = []
@@ -40,3 +42,5 @@ if user_input:
     # Tampilkan hasil
     st.write("### Respons Chatbot:")
     st.write(response)
+else:
+    st.write("Masukkan sebuah pertanyaan untuk mendapatkan respons.")
