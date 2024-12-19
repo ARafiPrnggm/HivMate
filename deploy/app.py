@@ -30,41 +30,109 @@ st.set_page_config(page_title="Chatbot Edukasi HIV", page_icon="🎗️", layout
 st.image("https://pbs.twimg.com/profile_images/1272461269136576512/Uw9AShxq_400x400.jpg", width=100)  # Ganti "logo.png" dengan jalur logo Anda
 st.markdown("""
     <style>
-        .title {
-            color: #d90429;
-            font-size: 36px;
-            font-weight: bold;
-            text-align: center;
-            margin-top: -20px;
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f9f9f9;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
         }
-        .subtitle {
-            color: #333;
-            font-size: 18px;
-            text-align: center;
-            margin-bottom: 20px;
-        }
+
         .chat-container {
-            background-color: #ffffff;
+            width: 400px;
+            background-color: white;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
             border-radius: 10px;
-            padding: 20px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            max-width: 700px;
-            margin: auto;
+            overflow: hidden;
         }
-        .response {
-            background-color: #d90429;
-            color: #ffffff;
-            padding: 15px;
-            border-radius: 5px;
-            margin-top: 10px;
+
+        h1 {
+            background-color: #128cb5;
+            color: white;
+            margin: 0;
+            padding: 20px;
+            text-align: center;
+        }
+
+        #chat-box {
+            height: 300px;
+            padding: 20px;
+            overflow-y: auto;
+            background-color: #f1f1f1;
+        }
+
+        .bot-message {
+            background-color: #e0ffe0;
+            color: #333;
+            padding: 10px;
+            border-radius: 10px;
+            margin-bottom: 10px;
+            max-width: 80%;
+        }
+
+        .user-message {
+            background-color: #cce7ff;
+            color: #333;
+            padding: 10px;
+            border-radius: 10px;
+            margin-bottom: 10px;
+            max-width: 80%;
+            align-self: flex-end;
+        }
+
+        form {
+            display: flex;
+            border-top: 1px solid #ddd;
+        }
+
+        input {
+            flex: 1;
+            padding: 10px;
+            border: none;
+            border-top-left-radius: 10px;
+            border-bottom-left-radius: 10px;
+        }
+
+        button {
+            padding: 10px;
+            background-color: #128cb5;
+            color: white;
+            border: none;
+            cursor: pointer;
+            border-top-right-radius: 10px;
+            border-bottom-right-radius: 10px;
+        }
+
+        button:hover {
+            background-color: #128cb5;
         }
     </style>
-    <div class="title">Chatbot Edukasi HIV 🎗️</div>
-    <div class="subtitle">Temukan informasi terpercaya seputar HIV/AIDS di sini!</div>
 """, unsafe_allow_html=True)
 
-# Kontainer chat
-st.markdown('<div class="chat-container">', unsafe_allow_html=True)
+# Struktur HTML untuk chat
+st.markdown("""
+    <div class="chat-container">
+        <h1>Chatbot Edukasi HIV</h1>
+        <div id="chat-box">
+            <div class="bot-message">Halo! Selamat datang di Chatbot Edukasi HIV. Bagaimana saya bisa membantu Anda?</div>
+        </div>
+        <form>
+            <input type="text" id="user-input" placeholder="Tulis pesan Anda...">
+            <button type="submit">Kirim</button>
+        </form>
+    </div>
+""", unsafe_allow_html=True)
+
+# Fungsi Chatbot (gunakan komponen Streamlit)
+user_input = st.text_input("Tulis pesan Anda:", key="user_input")
+if user_input:
+    st.markdown(f"""
+        <div class="user-message">{user_input}</div>
+        <div class="bot-message">Ini adalah respons dari chatbot untuk: {user_input}</div>
+    """, unsafe_allow_html=True)
 
 # Variabel untuk riwayat percakapan
 if "chat_history" not in st.session_state:
