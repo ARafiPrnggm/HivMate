@@ -113,7 +113,7 @@ st.markdown("</div>", unsafe_allow_html=True)
 
 st.markdown("""
     <div style="text-align: center; margin-top: 50px; font-size: 12px; color: #888;">
-        Dibuat oleh <strong>[Nama Anda]</strong>. Chatbot ini bertujuan untuk meningkatkan kesadaran tentang HIV/AIDS. 
+        Dibuat oleh <strong>[A Rafi Paringgom Iwari]</strong>. Chatbot ini bertujuan untuk meningkatkan kesadaran tentang HIV/AIDS. 
         Jika membutuhkan informasi lebih lanjut, silakan konsultasi dengan profesional medis.
     </div>
 """, unsafe_allow_html=True)
