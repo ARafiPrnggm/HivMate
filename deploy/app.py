@@ -29,7 +29,7 @@ with col1:
 with col2:
     st.image("deploy/sd.jpg", width=200) 
 with col3:
-    st.image("deploy/hivmate-01.png", width=200)
+    st.image("deploy/hivmate-01.png", width=250)
 
 st.markdown("""
     <style>
