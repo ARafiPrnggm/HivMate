@@ -54,6 +54,16 @@ st.markdown(
             font-size: 18px;
             color: #CCCCCC;
         }
+        .logo-container {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+        .logo-container img {
+            height: 50px;
+            width: auto;
+        }
         .user-message {
             background-color: #FF3366;
             color: white;
@@ -109,9 +119,14 @@ st.markdown(
 
 st.markdown('<div class="chat-container">', unsafe_allow_html=True)
 
-# Header Section
+# Header Section with logos
 st.markdown(
     """
+    <div class="logo-container">
+        <img src="https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.itera.ac.id%2Fpengumuan-ujian-seleksi-mandiri-usm-itera%2Flogo-itera-oke%2F&psig=AOvVaw0VHb8wzOtQF9Ktxn1puSdb&ust=1734661139648000&source=images&cd=vfe&opi=89978449&ved=0CBEQjRxqFwoTCPD98LrisooDFQAAAAAdAAAAABAE/150" alt="Logo 1">
+        <img src="https://pbs.twimg.com/profile_images/1272461269136576512/Uw9AShxq_400x400.jpg" alt="Logo 2">
+        <img src="deploy/hivmate-01.png" alt="Logo 3">
+    </div>
     <div class="header">
         <h1>Chatbot Edukasi HIV 🎗️</h1>
         <p>Temukan informasi terpercaya seputar HIV/AIDS di sini!</p>
