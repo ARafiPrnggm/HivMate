@@ -10,15 +10,8 @@ file_path = os.path.join(os.path.dirname(__file__), "datasetDL.json")
 with open(file_path, "r", encoding="utf-8") as file:
     data = json.load(file)
 
-# Set page configuration (This should be the first command)
-st.set_page_config(page_title="Chatbot Edukasi HIV", page_icon="🎗️", layout="wide")
-
 # Inisialisasi model
-@st.cache_resource
-def load_model():
-    return SentenceTransformer("distiluse-base-multilingual-cased-v2")
-
-model = load_model()
+model = SentenceTransformer("distiluse-base-multilingual-cased-v2")
 
 # Parsing intents dari JSON
 questions = []
@@ -30,99 +23,57 @@ for intent in data["intents"]:
 # Hitung embeddings dataset untuk prediksi berbasis ML
 question_embeddings = model.encode(questions)
 
-# Menambahkan CSS dengan st.markdown
+# Streamlit UI dengan tema edukasi HIV
+st.set_page_config(page_title="Chatbot Edukasi HIV", page_icon="🎗️", layout="wide")
+
+# Header dengan logo
+st.image("logo.png", width=100)  # Ganti "logo.png" dengan jalur logo Anda
 st.markdown("""
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f9f9f9;
-            margin: 0;
-            padding: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-        }
-
-        .chat-container {
-            width: 400px;
-            background-color: white;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-            border-radius: 10px;
-            overflow: hidden;
-        }
-
-        h1 {
-            background-color: #128cb5;
-            color: white;
-            margin: 0;
-            padding: 20px;
+        .title {
+            color: #d90429;
+            font-size: 36px;
+            font-weight: bold;
             text-align: center;
+            margin-top: -20px;
         }
-
-        #chat-box {
-            height: 300px;
+        .subtitle {
+            color: #333;
+            font-size: 18px;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .chat-container {
+            background-color: #ffffff;
+            border-radius: 10px;
             padding: 20px;
-            overflow-y: auto;
-            background-color: #f1f1f1;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            max-width: 700px;
+            margin: auto;
         }
-
-        .bot-message {
-            background-color: #e0ffe0;
-            color: #333;
-            padding: 10px;
-            border-radius: 10px;
-            margin-bottom: 10px;
-            max-width: 80%;
-        }
-
-        .user-message {
-            background-color: #cce7ff;
-            color: #333;
-            padding: 10px;
-            border-radius: 10px;
-            margin-bottom: 10px;
-            max-width: 80%;
-            align-self: flex-end;
-        }
-
-        form {
-            display: flex;
-            border-top: 1px solid #ddd;
-        }
-
-        input {
-            flex: 1;
-            padding: 10px;
-            border: none;
-            border-top-left-radius: 10px;
-            border-bottom-left-radius: 10px;
-        }
-
-        button {
-            padding: 10px;
-            background-color: #128cb5;
-            color: white;
-            border: none;
-            cursor: pointer;
-            border-top-right-radius: 10px;
-            border-bottom-right-radius: 10px;
-        }
-
-        button:hover {
-            background-color: #128cb5;
+        .response {
+            background-color: #d90429;
+            color: #ffffff;
+            padding: 15px;
+            border-radius: 5px;
+            margin-top: 10px;
         }
     </style>
+    <div class="title">Chatbot Edukasi HIV 🎗️</div>
+    <div class="subtitle">Temukan informasi terpercaya seputar HIV/AIDS di sini!</div>
 """, unsafe_allow_html=True)
+
+# Kontainer chat
+st.markdown('<div class="chat-container">', unsafe_allow_html=True)
+
+# Variabel untuk riwayat percakapan
+if "chat_history" not in st.session_state:
+    st.session_state["chat_history"] = []
 
 # Input pengguna
 user_input = st.text_input("Tulis pertanyaan Anda di sini:", placeholder="Contoh: Apa itu HIV?", key="user_input")
 
-# Pastikan 'chat_history' ada di session_state
-if "chat_history" not in st.session_state:
-    st.session_state["chat_history"] = []
-
-if user_input.strip():
+if user_input:
     # Hitung embedding input pengguna
     user_embedding = model.encode([user_input])
     similarities = cosine_similarity(user_embedding, question_embeddings)
@@ -138,6 +89,8 @@ if user_input.strip():
 for chat in st.session_state["chat_history"]:
     st.write(f"**Anda:** {chat['user']}")
     st.markdown(f'<div class="response">**Chatbot:** {chat["bot"]}</div>', unsafe_allow_html=True)
+
+st.markdown("</div>", unsafe_allow_html=True)
 
 # Footer dengan kredit
 st.markdown("""
