@@ -118,6 +118,10 @@ st.markdown("""
 # Input pengguna
 user_input = st.text_input("Tulis pertanyaan Anda di sini:", placeholder="Contoh: Apa itu HIV?", key="user_input")
 
+# Pastikan 'chat_history' ada di session_state
+if "chat_history" not in st.session_state:
+    st.session_state["chat_history"] = []
+
 if user_input.strip():
     # Hitung embedding input pengguna
     user_embedding = model.encode([user_input])
@@ -128,8 +132,6 @@ if user_input.strip():
     response = responses[best_match_idx]
 
     # Simpan percakapan ke riwayat
-    if "chat_history" not in st.session_state:
-        st.session_state["chat_history"] = []
     st.session_state["chat_history"].append({"user": user_input, "bot": response})
 
 # Tampilkan riwayat percakapan
