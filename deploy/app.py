@@ -20,7 +20,7 @@ for intent in data["intents"]:
 
 question_embeddings = model.encode(questions)
 
-st.set_page_config(page_title="Chatbot Edukasi HIV", page_icon="🎗️", layout="wide")
+st.set_page_config(page_title="HiVMate: Teman Ngobrol Seputar HIV", page_icon="🎗️", layout="wide")
 
 col1, col2, col3 = st.columns([5, 5, 5])
 with col1:
@@ -95,7 +95,7 @@ st.markdown("""
         }
     </style>
     <div class="title">Chatbot Edukasi HIV 🎗️</div>
-    <div class="subtitle">Temukan informasi terpercaya seputar HIV/AIDS di sini!</div>
+    <div class="subtitle">Jangan gelisah. Temukan informasi seputar HIV/AIDS di sini!</div>
 """, unsafe_allow_html=True)
 
 st.markdown('<div class="chat-container" id="chat-container">', unsafe_allow_html=True)
@@ -103,7 +103,7 @@ st.markdown('<div class="chat-container" id="chat-container">', unsafe_allow_htm
 if "chat_history" not in st.session_state:
     st.session_state["chat_history"] = []
 
-user_input = st.text_input("Tulis pertanyaan Anda di sini:", placeholder="Contoh: Apa itu HIV?", key="user_input")
+user_input = st.text_input("Tuliskan pertanyaan kamu disini ya:", placeholder="Contoh: Apa itu HIV?", key="user_input")
 
 if user_input:
     user_embedding = model.encode([user_input])
@@ -120,7 +120,7 @@ st.markdown("</div>", unsafe_allow_html=True)
 
 st.markdown("""
     <div style="text-align: center; margin-top: 50px; font-size: 12px; color: #888;">
-        Dibuat oleh <strong>[A Rafi Paringgom Iwari]</strong>. Chatbot ini bertujuan untuk meningkatkan kesadaran tentang HIV/AIDS. 
+        Dibuat oleh <strong>A Rafi Paringgom Iwari</strong>. Chatbot ini bertujuan untuk meningkatkan kesadaran tentang HIV/AIDS. 
         Jika membutuhkan informasi lebih lanjut, silakan konsultasi dengan profesional medis.
     </div>
 """, unsafe_allow_html=True)
