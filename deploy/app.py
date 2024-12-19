@@ -23,7 +23,8 @@ question_embeddings = model.encode(questions)
 
 st.set_page_config(page_title="Chatbot Edukasi HIV", page_icon="🎗️", layout="wide")
 
-st.image("/deployhivmate-01.png", width=100) 
+st.image("https://pbs.twimg.com/profile_images/1272461269136576512/Uw9AShxq_400x400.jpg", width=100)
+st.image("https://drive.google.com/file/d/1MaNsrdB8Hva59ioMiVldXLS-1XNxMbKl/view?usp=drive_link", width=100)
 st.markdown("""
     <style>
         .title {
