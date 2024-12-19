@@ -25,10 +25,10 @@ st.set_page_config(page_title="Chatbot Edukasi HIV", page_icon="🎗️", layout
 col1, col2 = st.columns([1,1])
 
 with col1:
-    st.image("deploy/hivmate-01.png", width=120)
+    st.image("deploy/hivmate-01.png", width=100)
 
 with col2:
-    st.image("deploy/sd.jpg", width=120)  
+    st.image("deploy/sd.jpg", width=100)  
 
 st.markdown("""
     <style>
