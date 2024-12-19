@@ -5,11 +5,12 @@ import numpy as np
 import json
 import os
 
+# Load dataset
 file_path = os.path.join(os.path.dirname(__file__), "datasetDL.json")
 with open(file_path, "r", encoding="utf-8") as file:
     data = json.load(file)
 
-# Inisialisasi model
+# Initialize model
 model = SentenceTransformer("distiluse-base-multilingual-cased-v2")
 
 questions = []
@@ -20,78 +21,104 @@ for intent in data["intents"]:
 
 question_embeddings = model.encode(questions)
 
+# Set Streamlit page config
 st.set_page_config(page_title="Chatbot Edukasi HIV", page_icon="🎗️", layout="wide")
 
-st.image("deploy/hivmate-01.png", width=120)
-
-st.markdown("""
+st.markdown(
+    """
     <style>
-        .title {
-            color: #d90429;
-            font-size: 36px;
-            font-weight: bold;
-            text-align: center;
-            margin-top: -20px;
+        body {
+            background-color: #121212;
+            color: white;
         }
-        .subtitle {
-            color: #333;
-            font-size: 18px;
+        .chat-container {
+            background-color: #1E1E1E;
+            padding: 20px;
+            border-radius: 10px;
+            max-width: 800px;
+            margin: 50px auto;
+            box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.5);
+            font-family: Arial, sans-serif;
+        }
+        .header {
             text-align: center;
             margin-bottom: 20px;
         }
-        .chat-container {
-            background-color: #f4f4f4;
-            border-radius: 10px;
-            padding: 20px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            max-width: 700px;
-            margin: auto;
-            overflow-y: auto;
-            max-height: 500px;
+        .header h1 {
+            color: #FF3366;
+            font-size: 36px;
+            font-weight: bold;
+            margin-bottom: 10px;
         }
-        .chat-bubble-user {
-            background-color: #d90429;
-            color: #ffffff;
-            padding: 10px;
-            border-radius: 20px;
-            margin: 5px 0;
-            max-width: 80%;
-            float: left;
-            clear: both;
-            position: relative;
+        .header p {
+            font-size: 18px;
+            color: #CCCCCC;
         }
-        .chat-bubble-bot {
-            background-color: #2b2d42;
-            color: #ffffff;
-            padding: 10px;
-            border-radius: 20px;
-            margin: 5px 0;
-            max-width: 80%;
+        .user-message {
+            background-color: #FF3366;
+            color: white;
+            padding: 15px;
+            border-radius: 15px;
+            text-align: right;
+            margin-bottom: 10px;
+            max-width: 70%;
             float: right;
             clear: both;
-            position: relative;
+            box-shadow: 0px 4px 6px rgba(255, 51, 102, 0.5);
         }
-        .response {
-            font-size: 16px;
+        .bot-message {
+            background-color: #333333;
+            color: white;
+            padding: 15px;
+            border-radius: 15px;
+            text-align: left;
+            margin-bottom: 10px;
+            max-width: 70%;
+            float: left;
+            clear: both;
+            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.5);
         }
-        .send-button {
-            background-color: #d90429;
+        input[type=text] {
+            background-color: #1E1E1E;
+            color: white;
+            border: 1px solid #444;
+            border-radius: 5px;
+            padding: 10px;
+            width: 100%;
+            margin-bottom: 10px;
+        }
+        input::placeholder {
+            color: #888;
+        }
+        button {
+            background-color: #FF3366;
             color: white;
             border: none;
             padding: 10px 20px;
-            border-radius: 20px;
+            border-radius: 5px;
             cursor: pointer;
-            width: 100%;
+            font-size: 16px;
         }
-        .send-button:hover {
-            background-color: #b10425;
+        button:hover {
+            background-color: #FF6699;
         }
     </style>
-    <div class="title">Chatbot Edukasi HIV 🎗️</div>
-    <div class="subtitle">Temukan informasi terpercaya seputar HIV/AIDS di sini!</div>
-""", unsafe_allow_html=True)
+    """,
+    unsafe_allow_html=True
+)
 
-st.markdown('<div class="chat-container" id="chat-container">', unsafe_allow_html=True)
+st.markdown('<div class="chat-container">', unsafe_allow_html=True)
+
+# Header Section
+st.markdown(
+    """
+    <div class="header">
+        <h1>Chatbot Edukasi HIV 🎗️</h1>
+        <p>Temukan informasi terpercaya seputar HIV/AIDS di sini!</p>
+    </div>
+    """,
+    unsafe_allow_html=True
+)
 
 if "chat_history" not in st.session_state:
     st.session_state["chat_history"] = []
@@ -103,22 +130,14 @@ if user_input:
     similarities = cosine_similarity(user_embedding, question_embeddings)
     best_match_idx = np.argmax(similarities)
     response = responses[best_match_idx]
-    st.session_state["chat_history"].append({"user": user_input, "bot": response})
 
-for chat in st.session_state["chat_history"]:
-    st.markdown(f'<div class="chat-bubble-user">{chat["user"]}</div>', unsafe_allow_html=True)
-    st.markdown(f'<div class="chat-bubble-bot">{chat["bot"]}</div>', unsafe_allow_html=True)
+    st.session_state["chat_history"].append(("user", user_input))
+    st.session_state["chat_history"].append(("bot", response))
 
-st.markdown("</div>", unsafe_allow_html=True)
+for sender, message in st.session_state["chat_history"]:
+    if sender == "user":
+        st.markdown(f'<div class="user-message">{message}</div>', unsafe_allow_html=True)
+    else:
+        st.markdown(f'<div class="bot-message">{message}</div>', unsafe_allow_html=True)
 
-st.markdown("""
-    <div style="text-align: center; margin-top: 50px; font-size: 12px; color: #888;">
-        Dibuat oleh <strong>A Rafi Paringgom Iwari</strong>. Chatbot ini bertujuan untuk meningkatkan kesadaran tentang HIV/AIDS. 
-        Jika membutuhkan informasi lebih lanjut, silakan konsultasi dengan profesional medis.
-    </div>
-""", unsafe_allow_html=True)
-
-if st.button("Kirim", key="send_button"):
-    user_input = st.session_state.get("user_input", "")
-    if user_input:
-        st.text_input("Tulis pertanyaan Anda di sini:", placeholder="Contoh: Apa itu HIV?", key="user_input", value="")
+st.markdown('</div>', unsafe_allow_html=True)
