@@ -22,13 +22,9 @@ question_embeddings = model.encode(questions)
 
 st.set_page_config(page_title="Chatbot Edukasi HIV", page_icon="🎗️", layout="wide")
 
-col1, col2 = st.columns([0.5,0.5])
+st.image("deploy/hivmate-01.png", width=100)
 
-with col1:
-    st.image("deploy/hivmate-01.png", width=100)
-
-with col2:
-    st.image("deploy/sd.jpg", width=100)  
+st.image("deploy/sd.jpg", width=100)  
 
 st.markdown("""
     <style>
