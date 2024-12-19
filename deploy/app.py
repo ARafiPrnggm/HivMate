@@ -10,6 +10,9 @@ file_path = os.path.join(os.path.dirname(__file__), "datasetDL.json")
 with open(file_path, "r", encoding="utf-8") as file:
     data = json.load(file)
 
+# Set page configuration (This should be the first command)
+st.set_page_config(page_title="Chatbot Edukasi HIV", page_icon="🎗️", layout="wide")
+
 # Inisialisasi model
 @st.cache_resource
 def load_model():
@@ -28,9 +31,6 @@ for intent in data["intents"]:
 question_embeddings = model.encode(questions)
 
 # Streamlit UI dengan tema edukasi HIV
-st.set_page_config(page_title="Chatbot Edukasi HIV", page_icon="🎗️", layout="wide")
-
-# Header dengan logo
 st.image("https://pbs.twimg.com/profile_images/1272461269136576512/Uw9AShxq_400x400.jpg", width=100)  # Ganti dengan jalur logo Anda
 
 st.markdown("""
