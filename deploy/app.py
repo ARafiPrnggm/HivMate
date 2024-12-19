@@ -20,7 +20,7 @@ for intent in data["intents"]:
 
 question_embeddings = model.encode(questions)
 
-st.set_page_config(page_title="HiVMate: Teman Ngobrol Seputar HIV", page_icon="🎗️", layout="wide")
+st.set_page_config(page_title="HiVMate", page_icon="🎗️", layout="wide")
 
 col1, col2, col3 = st.columns([5, 5, 5])
 with col1:
@@ -94,7 +94,7 @@ st.markdown("""
             background-color: #b10425;
         }
     </style>
-    <div class="title">Chatbot Edukasi HIV 🎗️</div>
+    <div class="title">HiVMate: Teman Ngobrol Seputar HIV 🎗️</div>
     <div class="subtitle">Jangan gelisah. Temukan informasi seputar HIV/AIDS di sini!</div>
 """, unsafe_allow_html=True)
 
