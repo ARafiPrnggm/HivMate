@@ -1,44 +1,42 @@
 import streamlit as st
-from sentence_transformers import SentenceTransformer, util
-import json
+from sentence_transformers import SentenceTransformer
+from sklearn.metrics.pairwise import cosine_similarity
 import numpy as np
+import json
 
-# Load dataset
-with open("datasetDL.json", "r") as file:
-    data = json.load(file)["intents"]
+# Inisialisasi model
+model = SentenceTransformer("distiluse-base-multilingual-cased-v2")
 
-# Flatten dataset: pertanyaan dan respons
+# Baca data dari file JSON
+with open("datasetDL.json", "r", encoding="utf-8") as file:
+    data = json.load(file)
+
+# Parsing intents dari JSON
 questions = []
 responses = []
-for intent in data:
+for intent in data["intents"]:
     questions.extend(intent["text"])
     responses.extend(intent["responses"])
 
-# Load pretrained model
-model = SentenceTransformer("distiluse-base-multilingual-cased-v2")
+# Hitung embeddings dataset untuk prediksi berbasis ML
+question_embeddings = model.encode(questions)
 
-# Encode all questions
-question_embeddings = model.encode(questions, convert_to_tensor=True)
+# Streamlit UI
+st.title("Chatbot Berbasis Streamlit")
+st.write("Masukkan pertanyaan Anda di bawah ini dan dapatkan respons dari chatbot.")
 
-# Generate chatbot response
-def generate_response(user_input, threshold=0.7):
-    user_embedding = model.encode(user_input, convert_to_tensor=True)
-    similarities = util.cos_sim(user_embedding, question_embeddings)
-    max_idx = similarities.argmax().item()
-    max_similarity = similarities[0, max_idx].item()
-
-    if max_similarity > threshold:
-        return responses[max_idx]
-    else:
-        return "Maaf, saya tidak memahami pertanyaan Anda. Bisa Anda jelaskan lebih lanjut?"
-
-# Streamlit interface
-st.title("Chatbot Tentang HIV")
-st.write("Halo! Saya di sini untuk membantu Anda dengan pertanyaan terkait HIV. 😊")
-
-# User input
-user_input = st.text_input("Masukkan pertanyaan Anda:")
+# Input pengguna
+user_input = st.text_input("Pertanyaan Anda:", "")
 
 if user_input:
-    response = generate_response(user_input)
-    st.write(f"**Bot:** {response}")
+    # Hitung embedding input pengguna
+    user_embedding = model.encode([user_input])
+    similarities = cosine_similarity(user_embedding, question_embeddings)
+    best_match_idx = np.argmax(similarities)
+
+    # Ambil respons berbasis kemiripan tertinggi
+    response = responses[best_match_idx]
+    
+    # Tampilkan hasil
+    st.write("### Respons Chatbot:")
+    st.write(response)
