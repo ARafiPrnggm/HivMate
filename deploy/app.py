@@ -24,7 +24,7 @@ st.set_page_config(page_title="Chatbot Edukasi HIV", page_icon="🎗️", layout
 
 col1, col2, col3 = st.columns([1, 1, 1])
 with col1:
-    st.image("deploy/Logo-ITERA.png", width=120)  
+    st.image("deploy/Logo_ITERA.png", width=120)  
 
 with col2:
     st.image("deploy/sd.jpg", width=120) 
