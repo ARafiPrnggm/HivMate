@@ -29,9 +29,9 @@ st.set_page_config(page_title="Chatbot Edukasi HIV", page_icon="🎗️", layout
 st.markdown(
     """
     <div style="text-align: center; display: flex; justify-content: center; gap: 20px; margin-bottom: 20px;">
-        <img src="https://pbs.twimg.com/profile_images/1272461269136576512/Uw9AShxq_400x400.jpg" alt="Logo 1" width="70"/>
-        <img src="https://drive.google.com/uc?id=1MaNsrdB8Hva59ioMiVldXLS-1XNxMbKl" alt="Logo 2" width="70"/>
-        <img src="https://upload.wikimedia.org/wikipedia/commons/a/a7/React-icon.svg" alt="Logo 3" width="70"/>
+        <img src="https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.itera.ac.id%2Fpengumuan-ujian-seleksi-mandiri-usm-itera%2Flogo-itera-oke%2F&psig=AOvVaw0BwqoyopUDh0m3YMpw4Z7Z&ust=1734657703016000&source=images&cd=vfe&opi=89978449&ved=0CBEQjRxqFwoTCNiCn9PVsooDFQAAAAAdAAAAABAE"  alt="Logo 3" width="70"/>
+        <img src="https://www.google.com/url?sa=i&url=https%3A%2F%2Ftwitter.com%2Fsainsdataitera&psig=AOvVaw1FvoT0EezzasbwwwQKTfA1&ust=1734657601186000&source=images&cd=vfe&opi=89978449&ved=0CBQQjRxqFwoTCODN-bHVsooDFQAAAAAdAAAAABAE" alt="Logo 2" width="70"/>
+        <img src="/deploy/hivmate.png" alt="Logo 3" width="70"/>
     </div>
     """,
     unsafe_allow_html=True
