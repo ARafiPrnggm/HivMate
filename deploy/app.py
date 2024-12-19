@@ -23,13 +23,57 @@ for intent in data["intents"]:
 # Hitung embeddings dataset untuk prediksi berbasis ML
 question_embeddings = model.encode(questions)
 
-# Streamlit UI
-st.title("Chatbot Berbasis Streamlit")
-st.write("Masukkan pertanyaan Anda di bawah ini dan dapatkan respons dari chatbot.")
+# Streamlit UI dengan tema edukasi HIV
+st.set_page_config(page_title="Chatbot Edukasi HIV", page_icon="🎗️", layout="wide")
+
+# Header dan pengenalan
+st.markdown("""
+    <style>
+        body {
+            background-color: #f7f7f7;
+        }
+        .title {
+            color: #d90429;
+            font-size: 36px;
+            font-weight: bold;
+            text-align: center;
+        }
+        .subtitle {
+            color: #333;
+            font-size: 18px;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .chat-container {
+            background-color: #ffffff;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            max-width: 700px;
+            margin: auto;
+        }
+        .user-input {
+            margin-top: 20px;
+        }
+        .response {
+            background-color: #d90429;
+            color: #ffffff;
+            padding: 15px;
+            border-radius: 5px;
+            margin-top: 10px;
+        }
+    </style>
+    <div class="title">Chatbot Edukasi HIV 🎗️</div>
+    <div class="subtitle">Temukan informasi terpercaya seputar HIV/AIDS di sini!</div>
+""", unsafe_allow_html=True)
+
+# Kontainer chat
+st.markdown('<div class="chat-container">', unsafe_allow_html=True)
 
 # Input pengguna
-user_input = st.text_input("Pertanyaan Anda:", "")
+user_input = st.text_input("Tulis pertanyaan Anda di sini:", key="user_input")
 
+# Jika pengguna memberikan input
 if user_input:
     # Hitung embedding input pengguna
     user_embedding = model.encode([user_input])
@@ -38,9 +82,16 @@ if user_input:
 
     # Ambil respons berbasis kemiripan tertinggi
     response = responses[best_match_idx]
-    
+
     # Tampilkan hasil
-    st.write("### Respons Chatbot:")
-    st.write(response)
-else:
-    st.write("Masukkan sebuah pertanyaan untuk mendapatkan respons.")
+    st.markdown(f'<div class="response">{response}</div>', unsafe_allow_html=True)
+
+st.markdown("</div>", unsafe_allow_html=True)
+
+# Footer
+st.markdown("""
+    <div style="text-align: center; margin-top: 50px; font-size: 12px; color: #888;">
+        Chatbot Edukasi HIV dibuat untuk membantu meningkatkan kesadaran tentang HIV/AIDS. 
+        Jika Anda membutuhkan informasi lebih lanjut, konsultasikan dengan profesional medis.
+    </div>
+""", unsafe_allow_html=True)
