@@ -8,7 +8,8 @@ import os
 file_path = os.path.join(os.path.dirname(__file__), "datasetDL.json")
 with open(file_path, "r", encoding="utf-8") as file:
     data = json.load(file)
-    
+
+# Inisialisasi model
 model = SentenceTransformer("distiluse-base-multilingual-cased-v2")
 
 questions = []
@@ -19,77 +20,94 @@ for intent in data["intents"]:
 
 question_embeddings = model.encode(questions)
 
+# Set up Streamlit page
 st.set_page_config(page_title="Chatbot Edukasi HIV", page_icon="🎗️", layout="wide")
 
-st.image("deploy/hivmate-01.png", width=200)
-
+# Add header styling with avatar and Start button
 st.markdown("""
     <style>
-        .title {
-            color: #d90429;
-            font-size: 36px;
-            font-weight: bold;
-            text-align: center;
-            margin-top: -20px;
-        }
-        .subtitle {
-            color: #333;
-            font-size: 18px;
-            text-align: center;
-            margin-bottom: 20px;
-        }
-        .chat-container {
-            background-color: #f4f4f4;
-            border-radius: 10px;
+        .header {
+            background-color: #336699;
             padding: 20px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            max-width: 700px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .header img {
+            border-radius: 50%;
+            width: 60px;
+            height: 60px;
+        }
+        .header h1 {
+            color: #ffffff;
+            font-size: 24px;
+            margin: 0;
+            flex-grow: 1;
+            text-align: center;
+        }
+        .header button {
+            background-color: #00b4d8;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        .header button:hover {
+            background-color: #0077b6;
+        }
+    </style>
+    <div class="header">
+        <img src="https://placekitten.com/60/60" alt="Avatar">
+        <h1>🎗️ Chatbot Edukasi HIV</h1>
+        <button onclick="location.href='#chat-container'">Start</button>
+    </div>
+""", unsafe_allow_html=True)
+
+# Add custom chat container styling
+st.markdown("""
+    <style>
+        .chat-container {
+            background-color: #f0f8ff;
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            max-width: 750px;
             margin: auto;
             overflow-y: auto;
-            max-height: 500px;
+            max-height: 600px;
+            border: 1px solid #ddd;
         }
         .chat-bubble-user {
             background-color: #d90429;
-            color: #ffffff;
+            color: white;
             padding: 10px;
-            border-radius: 20px;
-            margin: 5px 0;
-            max-width: 80%;
-            float: left;
+            border-radius: 15px;
+            margin: 10px 0;
+            max-width: 40%;
+            float: right;
             clear: both;
-            position: relative;
+            text-align: right;
         }
         .chat-bubble-bot {
             background-color: #2b2d42;
-            color: #ffffff;
+            color: white;
             padding: 10px;
-            border-radius: 20px;
-            margin: 5px 0;
-            max-width: 80%;
-            float: right;
+            border-radius: 15px;
+            margin: 10px 0;
+            max-width: 40%;
+            float: left;
             clear: both;
-            position: relative;
         }
         .response {
             font-size: 16px;
         }
-        .send-button {
-            background-color: #d90429;
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 20px;
-            cursor: pointer;
-            width: 100%;
-        }
-        .send-button:hover {
-            background-color: #b10425;
-        }
     </style>
-    <div class="title">Chatbot Edukasi HIV 🎗️</div>
-    <div class="subtitle">Temukan informasi terpercaya seputar HIV/AIDS di sini!</div>
 """, unsafe_allow_html=True)
 
+# Chat history container
 st.markdown('<div class="chat-container" id="chat-container">', unsafe_allow_html=True)
 
 if "chat_history" not in st.session_state:
@@ -105,14 +123,15 @@ if user_input:
     st.session_state["chat_history"].append({"user": user_input, "bot": response})
 
 for chat in st.session_state["chat_history"]:
-    st.markdown(f'<div class="chat-bubble-user">{chat["user"]}</div>', unsafe_allow_html=True)
     st.markdown(f'<div class="chat-bubble-bot">{chat["bot"]}</div>', unsafe_allow_html=True)
+    st.markdown(f'<div class="chat-bubble-user">{chat["user"]}</div>', unsafe_allow_html=True)
 
 st.markdown("</div>", unsafe_allow_html=True)
 
+# Footer with attribution
 st.markdown("""
-    <div style="text-align: center; margin-top: 50px; font-size: 12px; color: #888;">
-        Dibuat oleh <strong>[A Rafi Paringgom Iwari]</strong>. Chatbot ini bertujuan untuk meningkatkan kesadaran tentang HIV/AIDS. 
+    <div style="text-align: center; margin-top: 30px; font-size: 14px; color: #555;">
+        Dibuat oleh <strong>A Rafi Paringgom Iwari</strong>. Chatbot ini bertujuan untuk meningkatkan kesadaran tentang HIV/AIDS. 
         Jika membutuhkan informasi lebih lanjut, silakan konsultasi dengan profesional medis.
     </div>
 """, unsafe_allow_html=True)
